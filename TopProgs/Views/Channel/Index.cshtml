@@ -1,0 +1,27 @@
+﻿@model List<TopProgs.Models.Channel>
+@{
+    ViewBag.Title = "Channel List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="lead">
+    <h1>Channel List</h1>
+</div>
+
+<div>
+    <select name="channel" size="10" multiple="multiple">
+        @foreach (var c in Model)
+        {
+            <option>@c.Name</option>
+        }
+    </select>
+</div>
+
+<div>
+    <p></p>
+    <p>
+        <a class="btn btn-default" href="/Home">&laquo; Previous</a>
+        &nbsp;
+        <a class="btn btn-default" href="/Home">Next &raquo;</a>
+    </p>
+</div>
