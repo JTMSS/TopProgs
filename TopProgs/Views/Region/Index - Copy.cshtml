@@ -1,0 +1,46 @@
+﻿@model List<SelectListItem>
+
+@{
+    ViewBag.Title = "Region List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form action="@Url.Action("PostRegion","Region")" method="post" name="regions">
+    <div class="lead">
+        <h1>Region List</h1>
+    </div>
+
+    <div>
+        @Html.ListBox("regions", Model)
+        @*<select name="regions" size="10" multiple="multiple">
+            @foreach (var r in Model)
+            {
+                <option value=@r.ID.ToString()>
+                    @r.Name
+                </option>
+            }
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <option value=@i>
+                    @Html.HiddenFor(m => m[i])
+                    @(m => m[i].Name)
+                </option>
+            }
+        </select>*@
+    </div>
+
+    <div>
+        <p></p>
+        <p>
+            <input type="reset" value="Reset" class="btn btn-default" />
+        </p>
+        <p>
+            <input type="submit" value="&laquo; Previous" class="btn btn-default" />
+            &nbsp;
+            <input type="submit" value="Next &raquo;" class="btn btn-default" />
+            @*<a class="btn btn-default" href="/Home">&laquo; Previous</a>
+            &nbsp;
+            <a class="btn btn-default" href="/Channel">Next &raquo;</a>*@
+        </p>
+    </div>
+</form>

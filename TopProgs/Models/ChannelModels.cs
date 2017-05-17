@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Web;
 
 namespace TopProgs.Models
@@ -8,21 +9,17 @@ namespace TopProgs.Models
     /// <summary>
     /// Channel information
     /// </summary>
-    public class Channel
+    [DataContract()]
+    [Serializable()]
+    public partial class Channel
     {
-        /// <summary>
-        /// Channel name
-        /// </summary>
+        [DataMember()]
+        public int Id { get; set; }
+
+        [DataMember()]
         public string Name { get; set; }
 
-        /// <summary>
-        /// Channel abbreviation
-        /// </summary>
-        public string Abbrv { get; set; }
-
-        /// <summary>
-        /// Channel ID
-        /// </summary>
-        public int ID { get; set; }
+        [DataMember()]
+        public string Abbreviation { get; set; }
     }
 }

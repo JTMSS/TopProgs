@@ -1,27 +1,41 @@
-﻿@model List<TopProgs.Models.Channel>
+﻿@model TopProgs.ViewModels.SelectedIDsAndItems
+
 @{
     ViewBag.Title = "Channel List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="lead">
-    <h1>Channel List</h1>
-</div>
+<h2>@ViewBag.Title.</h2>
+<div class="row">
+    <div class="col-md-8">
+        <section id="channelForm">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
 
-<div>
-    <select name="channel" size="10" multiple="multiple">
-        @foreach (var c in Model)
-        {
-            <option>@c.Name</option>
-        }
-    </select>
-</div>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-<div>
-    <p></p>
-    <p>
-        <a class="btn btn-default" href="/Home">&laquo; Previous</a>
-        &nbsp;
-        <a class="btn btn-default" href="/Home">Next &raquo;</a>
-    </p>
+                if (Model != null && Model.Items != null)
+                {
+                    @Html.ListBoxFor(
+                                        x => x.SelectedItemIds,
+                                        new SelectList(Model.Items, "Value", "Text"),
+                                        new { size = "14", multiple = "multiple" }
+                                    )
+                }
+
+                <div>
+                    <p></p>
+                    <p>
+                        <input type="reset" value="Reset" class="btn btn-default" />
+                    </p>
+                    <p>
+                        <a class="btn btn-default" href="~/Channel/Previous">&laquo; Previous</a>
+                        &nbsp;
+                        <input type="submit" value="Next &raquo;" class="btn btn-default" />
+                    </p>
+                </div>
+            }
+        </section>
+    </div>
 </div>

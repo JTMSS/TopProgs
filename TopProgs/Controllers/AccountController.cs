@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using TopProgs.Models;
+using TopProgs.Helpers;
 
 namespace TopProgs.Controllers
 {
@@ -79,7 +80,19 @@ namespace TopProgs.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    // Must get token for the API calls.
+                    if (TokenHelper.GetAndSaveToken(model.Email, model.Password))
+                    {
+                        // Success so carry on.
+                        return RedirectToLocal(returnUrl);
+                    }
+                    else
+                    {
+                        // Couldn't get token, so force signout & flag error to user.
+                        AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                        ModelState.AddModelError("", "Second stage authentication failed.");
+                        return View(model);
+                    }
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:

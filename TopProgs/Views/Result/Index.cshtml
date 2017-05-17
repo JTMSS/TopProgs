@@ -1,0 +1,131 @@
+﻿@model TopProgs.Models.Result
+
+@{
+    ViewBag.Title = "Results";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+function sortTable(n) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.getElementById("TPResults");
+  switching = true;
+  // Set the sorting direction to ascending:
+  dir = "asc";
+  // Make a loop that will continue until
+  // no switching has been done:
+  while (switching) {
+    // start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("TR");
+    // Loop through all table rows (except the
+    // first, which contains table headers):
+    for (i = 1; i < (rows.length - 1); i++) {
+      // start by saying there should be no switching:
+      shouldSwitch = false;
+      // Get the two elements you want to compare,
+      // one from current row and one from the next:
+      x = rows[i].getElementsByTagName("TD")[n];
+      y = rows[i + 1].getElementsByTagName("TD")[n];
+      // check if the two rows should switch place,
+      // based on the direction, asc or desc:
+      if (dir == "asc") {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          // if so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          // if so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      // If a switch has been marked, make the switch
+      // and mark that a switch has been done:
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      // Each time a switch is done, increase this count by 1:
+      switchcount ++;
+    } else {
+      // If no switching has been done AND the direction is "asc",
+      // set the direction to "desc" and run the while loop again.
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+</script>
+
+<h2>@ViewBag.Title.</h2>
+<div class="row">
+    <div class="col-md-8">
+        <section id="regionForm">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                if (Model != null)
+                {
+                    <table id="TPResults" border="1" class="table-striped">
+                        <thead>
+                            <tr>
+                                @*@for (int i = 0; i < Model.Headers.Count(); i++)
+                                {
+                                    var click = "sortTable(" + i.ToString() + ")";
+                                    <th onclick=click>@Model.Headers[i]</th>
+                                }
+                                @for (int i = 0; i < Model.MetricNames.Count(); i++)
+                                {
+                                    var click = "sortTable(" + (i + Model.Headers.Count()).ToString() + ")";
+                                    <th onclick=click>@Model.MetricNames[i]</th>
+                                }*@
+                                <th onclick="sortTable(0)" align="center" width="">@Model.Headers[0]</th>
+                                <th onclick="sortTable(1)" align="center">@Model.Headers[1]</th>
+                                <th onclick="sortTable(2)" align="center">@Model.Headers[2]</th>
+                                <th onclick="sortTable(3)" align="center">@Model.Headers[3]</th>
+                                <th onclick="sortTable(4)" align="center">@Model.MetricNames[0]</th>
+                                <th onclick="sortTable(5)" align="center">@Model.MetricNames[1]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Items.Count(); i++)
+                            {
+                                <tr>
+                                    <td align="left">@Model.Items[i].Title</td>
+                                    <td align="left">@Model.Items[i].Chan</td>
+                                    <td align="right">@Model.Items[i].TheDate.ToShortDateString()</td>
+                                    <td align="right">@Model.Items[i].Time.ToString("0000")</td>
+
+                                    @for (int j = 0; j < Model.Items[i].Figures.Count(); j++)
+                                    {
+                                        for (int k = 0; k < Model.Items[i].Figures[j].Count(); k++)
+                                        {
+                                            <td align="right">@Model.Items[i].Figures[j][k].ToString("#0.000")</td>
+                                        }
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+
+                <div>
+                    <p></p>
+                    <p>
+                        <a class="btn btn-default" href="~/Result/Previous">&laquo; Previous</a>
+                        &nbsp;
+                        <a class="btn btn-default" href="~/Result/StartAgain">Start Again &raquo;</a>
+                    </p>
+                </div>
+            }
+        </section>
+    </div>
+</div>
