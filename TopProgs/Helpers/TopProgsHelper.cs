@@ -40,6 +40,8 @@ namespace TopProgs.Helpers
                             {
                                 if (sdHlp.LoadItem(vstrUser, null, null, "TPFilter", ref clsFilt, ref rstrErr))
                                 {
+                                    sdHlp.LoadItem(vstrUser, null, null, "TPInvKey", ref strInvKey, ref rstrErr);
+
                                     if (BuildEventFilter(arrRegID, arrChanID, arrDate, arrTarg, clsFilt, ref clsEvntFilt, ref rstrErr))
                                     {
                                         if (GetEvents(vstrUser, clsEvntFilt, ref lstEvents, ref lstEventIDs, ref rstrErr))
@@ -48,6 +50,8 @@ namespace TopProgs.Helpers
                                             {
                                                 if (BuildInventory(vstrUser, clsInvInfo, clsEvntFilt, ref strInvKey, ref rstrErr))
                                                 {
+                                                    sdHlp.SaveItem(vstrUser, "", "", "TPInvKey", strInvKey, ref rstrErr);
+
                                                     if (CalcMetrics(vstrUser, strInvKey, ref lstEventMetric, ref rstrErr))
                                                     {
                                                         blnOk = BuildReport(lstEvents, lstEventMetric, clsInvInfo.TargetName, ref rclsTPRes, ref rstrErr);
@@ -61,8 +65,9 @@ namespace TopProgs.Helpers
                         }
                     }
                 }
+
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 rstrErr = "Unexpected error:" + exc.Message;
             }
