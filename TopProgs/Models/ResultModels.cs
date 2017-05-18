@@ -10,6 +10,8 @@ namespace TopProgs.Models
     [Serializable()]
     public class Result
     {
+        public string Region { get; set; }
+
         public List<string> Headers { get; set; }
 
         public List<string> TargetNames { get; set; }

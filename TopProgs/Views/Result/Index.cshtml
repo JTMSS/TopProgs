@@ -34,30 +34,30 @@ function sortTable(n) {
             x = rows[i].getElementsByTagName("TD")[n];
             y = rows[i + 1].getElementsByTagName("TD")[n];
 
-            if (isNumeric(x.innerHTML))
-            {
-                xvalue = parseFloat(x.innerHTML);
-                yvalue = parseFloat(y.innerHTML);
-            }
-            else
-            {
-                xvalue = x.innerHTML.toLowerCase();
-                yvalue = y.innerHTML.toLowerCase();
-            }
-
-            // check if the two rows should switch place,
-            // based on the direction, asc or desc:
-            if (dir == "asc") {
-                if (xvalue > yvalue) {
-                    // if so, mark as a switch and break the loop:
-                    shouldSwitch= true;
-                    break;
+            if (x != null && y != null) {
+                if (isNumeric(x.innerHTML)) {
+                    xvalue = parseFloat(x.innerHTML);
+                    yvalue = parseFloat(y.innerHTML);
                 }
-            } else if (dir == "desc") {
-                if (xvalue < yvalue) {
-                    // if so, mark as a switch and break the loop:
-                    shouldSwitch= true;
-                    break;
+                else {
+                    xvalue = x.innerHTML.toLowerCase();
+                    yvalue = y.innerHTML.toLowerCase();
+                }
+
+                // check if the two rows should switch place,
+                // based on the direction, asc or desc:
+                if (dir == "asc") {
+                    if (xvalue > yvalue) {
+                        // if so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (xvalue < yvalue) {
+                        // if so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
                 }
             }
         }
@@ -86,70 +86,75 @@ function isNumeric(n) {
 }
 </script>
 
-<h2>@ViewBag.Title.</h2>
 <div class="row">
     <div class="col-md-8">
-        <section id="regionForm">
-            @using (Html.BeginForm())
+    <section id="resultForm">
+        @using (Html.BeginForm())
+        {
+            <h2>@ViewBag.Title</h2>
+            <p>
+                <a class="btn btn-default" href="~/Result/Previous">&laquo; Previous</a>
+                &nbsp;
+                <a class="btn btn-default" href="~/Result/StartAgain">Start Again &raquo;</a>
+            </p>
+            <p></p>
+
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            if (Model != null && Model.Headers != null && Model.Headers.Count > 0)
             {
-                @Html.AntiForgeryToken()
+                <p>Region: @Model.Region</p>
+                <p></p>
 
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                if (Model != null && Model.Headers != null)
-                {
-                    <table id="TPResults" border="1" class="table table-striped">
-                        <thead>
-                            <tr>
-                                @*@for (int i = 0; i < Model.Headers.Count(); i++)
-                                {
-                                    var click = "sortTable(" + i.ToString() + ")";
-                                    <th onclick=click>@Model.Headers[i]</th>
-                                }
-                                @for (int i = 0; i < Model.MetricNames.Count(); i++)
-                                {
-                                    var click = "sortTable(" + (i + Model.Headers.Count()).ToString() + ")";
-                                    <th onclick=click>@Model.MetricNames[i]</th>
-                                }*@
-                                <th onclick="sortTable(0)" align="center">@Model.Headers[0]</th>
-                                <th onclick="sortTable(1)" align="center">@Model.Headers[1]</th>
-                                <th onclick="sortTable(2)" align="center">@Model.Headers[2]</th>
-                                <th onclick="sortTable(3)" align="center">@Model.Headers[3]</th>
-                                <th onclick="sortTable(4)" align="center">@Model.MetricNames[0]</th>
-                                <th onclick="sortTable(5)" align="center">@Model.MetricNames[1]</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (int i = 0; i < Model.Items.Count(); i++)
+                <table id="TPResults" border="1" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th colspan=@Model.Headers.Count()></th>
+                            <th colspan=@Model.MetricNames.Count()>@Model.TargetNames[0]</th>
+                        </tr>
+                        <tr>
+                            @*@for (int i = 0; i < Model.Headers.Count(); i++)
                             {
-                                <tr>
-                                    <td align="left">@Model.Items[i].Title</td>
-                                    <td align="left">@Model.Items[i].Chan</td>
-                                    <td align="right">@Model.Items[i].TheDate.ToShortDateString()</td>
-                                    <td align="right">@Model.Items[i].Time.ToString("0000")</td>
-
-                                    @for (int j = 0; j < Model.Items[i].Figures.Count(); j++)
-                                    {
-                                        for (int k = 0; k < Model.Items[i].Figures[j].Count(); k++)
-                                        {
-                                            <td align="right">@Model.Items[i].Figures[j][k].ToString("#0.000")</td>
-                                        }
-                                    }
-                                </tr>
+                                var click = "<script>sortTable(" + i.ToString() + ")</script>";
+                                <th onclick=click>@Model.Headers[i]</th>
                             }
-                        </tbody>
-                    </table>
-                }
+                            @for (int i = 0; i < Model.MetricNames.Count(); i++)
+                            {
+                                var click = "<script>sortTable(" + (i + Model.Headers.Count()).ToString() + ")</script>s";
+                                <th onclick=click>@Model.MetricNames[i]</th>
+                            }*@
+                            <th onclick="sortTable(0)">@Model.Headers[0]</th>
+                            <th onclick="sortTable(1)">@Model.Headers[1]</th>
+                            <th onclick="sortTable(2)">@Model.Headers[2]</th>
+                            <th onclick="sortTable(3)">@Model.Headers[3]</th>
+                            <th onclick="sortTable(4)">@Model.MetricNames[0]</th>
+                            <th onclick="sortTable(5)">@Model.MetricNames[1]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Items.Count(); i++)
+                        {
+                            <tr>
+                                <td align="left">@Model.Items[i].Title</td>
+                                <td align="left">@Model.Items[i].Chan</td>
+                                <td align="right">@Model.Items[i].TheDate.ToShortDateString()</td>
+                                <td align="right">@Model.Items[i].Time.ToString("0000")</td>
 
-                <div>
-                    <p></p>
-                    <p>
-                        <a class="btn btn-default" href="~/Result/Previous">&laquo; Previous</a>
-                        &nbsp;
-                        <a class="btn btn-default" href="~/Result/StartAgain">Start Again &raquo;</a>
-                    </p>
-                </div>
+                                @for (int j = 0; j < Model.Items[i].Figures.Count(); j++)
+                                {
+                                    for (int k = 0; k < Model.Items[i].Figures[j].Count(); k++)
+                                    {
+                                        <td align="right">@Model.Items[i].Figures[j][k].ToString("#0.000")</td>
+                                    }
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             }
-        </section>
-    </div>
+        }
+    </section>
+        </div>
 </div>

@@ -54,7 +54,7 @@ namespace TopProgs.Helpers
 
                                                     if (CalcMetrics(vstrUser, strInvKey, ref lstEventMetric, ref rstrErr))
                                                     {
-                                                        blnOk = BuildReport(lstEvents, lstEventMetric, clsInvInfo.TargetName, ref rclsTPRes, ref rstrErr);
+                                                        blnOk = BuildReport(lstEvents, lstEventMetric, clsInvInfo, ref rclsTPRes, ref rstrErr);
                                                     }
                                                 }
                                             }
@@ -65,7 +65,6 @@ namespace TopProgs.Helpers
                         }
                     }
                 }
-
             }
             catch (Exception exc)
             {
@@ -77,13 +76,15 @@ namespace TopProgs.Helpers
 
         private bool BuildReport(List<EventInfo> vlstEvents, 
                                  List<BLEventIDResult> vlstEventMetric, 
-                                 string vstrTargName,
+                                 BLInventoryInfo vclsInvInfo,
                                  ref Result rclsTPResult, 
                                  ref string rstrErr)
         {
             ResultItem clsRow = null;
             BLEventIDResult clsER = null;
             List<double> lstFigs = null;
+            List<string> lstRegNames = null;
+            EventInfo clsEI;
             bool blnOk = false;
 
             try
@@ -95,12 +96,23 @@ namespace TopProgs.Helpers
                 rclsTPResult.Headers.Add("Date");
                 rclsTPResult.Headers.Add("Time");
 
-                rclsTPResult.TargetNames.Add(vstrTargName);
+                rclsTPResult.TargetNames.Add(vclsInvInfo.TargetName);
 
                 rclsTPResult.MetricNames.Add("GRP");
                 rclsTPResult.MetricNames.Add("Thou");
 
-                foreach (EventInfo ei in vlstEvents )
+                lstRegNames = new List<string>();
+                foreach (int regID in vclsInvInfo.RegIDs)
+                {
+                    clsEI = vlstEvents.Find(x => x.Region.Id == regID);
+                    if (clsEI != null)
+                    {
+                        lstRegNames.Add(clsEI.Region.Name);
+                    }
+                }
+                rclsTPResult.Region = String.Join(",", lstRegNames);
+
+                foreach (EventInfo ei in vlstEvents)
                 {
                     clsRow = new ResultItem();
 
