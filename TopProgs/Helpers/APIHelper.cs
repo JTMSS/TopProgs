@@ -19,6 +19,7 @@ namespace TopProgs.Helpers
         static string ENDPOINT_VAXI_RF_DATASET = BASE_URL + "/api/Entity/DataSet";
         static string ENDPOINT_VAXI_RF_INVENTORY = BASE_URL + "/api/Inventory";
         static string ENDPOINT_VAXI_RF_INV_EVENTMETRIC = BASE_URL + "/api/Inventory/EventMetrics";
+        static string ENDPOINT_VAXI_RF_REP_TOPPROGS = BASE_URL + "/api/Report/TopProgs";
 
         public bool GetEntityList<T>(string vstrEndPoint,
                                      string vstrUser,
@@ -251,6 +252,26 @@ namespace TopProgs.Helpers
                                        ref string rstrErr)
         {
             return PostInfo(ENDPOINT_VAXI_RF_INV_EVENTMETRIC, vstrUser, vclsEMCall, ref rlstEvntMetric, ref rstrErr);
+        }
+
+        public bool PostTPReport(string vstrUser,
+                                TopProgsReportCall vclsTPCall,
+                                ref BLTopProgsReport rlstEventRes,
+                                ref string rstrErr)
+        {
+            List<BLTopProgsReport> lstResult = null;
+            bool blnOk = false;
+
+            if (PostInfo(ENDPOINT_VAXI_RF_REP_TOPPROGS, vstrUser, vclsTPCall, ref lstResult, ref rstrErr))
+            {
+                if (lstResult != null && lstResult.Count > 0)
+                {
+                    rlstEventRes = lstResult[0];
+                    blnOk = true;
+                }
+            }
+
+            return blnOk;
         }
     }
 }

@@ -10,14 +10,19 @@ namespace TopProgs.Models
     [Serializable()]
     public class Result
     {
+        [DataMember()]
         public string Region { get; set; }
 
+        [DataMember()]
         public List<string> Headers { get; set; }
 
+        [DataMember()]
         public List<string> TargetNames { get; set; }
 
+        [DataMember()]
         public List<string> MetricNames { get; set; }
 
+        [DataMember()]
         public List<ResultItem> Items { get; set; }
 
         public Result()
@@ -29,16 +34,23 @@ namespace TopProgs.Models
         }
     }
 
+    [DataContract()]
+    [Serializable()]
     public class ResultItem
     {
+        [DataMember()]
         public string Title { get; set; }
 
+        [DataMember()]
         public string Chan { get; set; }
 
+        [DataMember()]
         public DateTime TheDate { get; set; }
 
+        [DataMember()]
         public int Time { get; set; }
 
+        [DataMember()]
         public List<List<double>> Figures { get;set;}
 
         public ResultItem()

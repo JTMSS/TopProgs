@@ -37,7 +37,7 @@ namespace TopProgs.Controllers
                     {
                         for (int i = 0; i < 7; i++)
                         {
-                            selDays.Add(new SelectListItem { Text = clsDSInf.DayName[i], Value = clsDSInf.DayNameAbbrev[i] });
+                            selDays.Add(new SelectListItem { Text = clsDSInf.DayName[i], Value = clsDSInf.DayName[i] });
                         }
                     }
 

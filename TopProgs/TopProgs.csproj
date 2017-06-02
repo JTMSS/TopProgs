@@ -266,6 +266,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MetricModels.cs" />
     <Compile Include="Models\RegionModels.cs" />
+    <Compile Include="Models\ReportModels.cs" />
     <Compile Include="Models\ResultModels.cs" />
     <Compile Include="Models\TargetModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
